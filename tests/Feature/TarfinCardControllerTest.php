@@ -91,14 +91,16 @@ class TarfinCardControllerTest extends TestCase
      */
     public function a_customer_can_list_tarfin_cards(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
+        $tarfinCards = $user->tarfinCards()
+            ->saveMany(TarfinCard::factory()->times(3)->active()->make());
+        $collection = TarfinCardResource::collection($tarfinCards);
+        $request = Request::create(route('tarfin-cards.index'));
 
-        // 2. Act 🏋🏻‍
-        // TODO:
 
-        // 3. Assert ✅
-        // TODO:
+        $response = $this->actingAs($user)->get(route('tarfin-cards.index'));
+        $response->assertOk();
+        $response->assertExactJson(['data' => $collection->toArray($request)]);
     }
 
     /**
