@@ -15,10 +15,10 @@ return new class extends Migration {
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('amount');
-            $table->unsignedInteger('outstanding_amount'); // should use accessor to calculate
-            $table->string('currency_code');
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('amount')->nullable();
+            $table->unsignedInteger('outstanding_amount')->nullable(); // should use accessor to calculate
+            $table->string('currency_code')->default('TRY');
             $table->integer('terms')->default(1);
             $table->string('status')->default('PENDING');
             $table->timestamp('processed_at')->nullable();

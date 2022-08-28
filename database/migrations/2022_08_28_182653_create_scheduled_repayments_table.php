@@ -18,9 +18,9 @@ return new class extends Migration {
         Schema::create('scheduled_repayments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('loan_id')->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('amount');
-            $table->unsignedFloat('outstanding_amount'); // should use accessor to calculate
-            $table->string('currency_code');
+            $table->unsignedBigInteger('amount')->nullable();
+            $table->unsignedFloat('outstanding_amount')->nullable(); // should use accessor to calculate
+            $table->string('currency_code')->default('TRY');
             $table->timestamp('due_date')->nullable();
             $table->string('status')->default('PAID');
             $table->timestamps();
