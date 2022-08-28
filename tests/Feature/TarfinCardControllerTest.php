@@ -121,6 +121,22 @@ class TarfinCardControllerTest extends TestCase
     /**
      * @test
      */
+    public function a_customer_can_not_activate_the_tarfin_card_of_another_customer(): void
+    {
+        $customer = User::factory()->create();
+        $anotherCustomer = User::factory()->create();
+        $tarfinCard = $anotherCustomer->tarfinCards()
+            ->save(TarfinCard::factory()->deactive()->make());
+
+        $this->actingAs($customer)
+            ->putJson(route('tarfin-cards.update', $tarfinCard), [
+                'is_active' => true,
+            ])->assertForbidden();
+    }
+
+    /**
+     * @test
+     */
     public function a_customer_can_deactivate_the_tarfin_card(): void
     {
         $user = User::factory()->create();
@@ -170,5 +186,4 @@ class TarfinCardControllerTest extends TestCase
             ->delete(route('tarfin-cards.destroy', $tarfinCard))
             ->assertForbidden();
     }
-
 }
