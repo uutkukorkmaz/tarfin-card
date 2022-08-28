@@ -21,7 +21,6 @@ class User extends Authenticatable
 
     use HasApiTokens;
 
-    use Notifiable;
 
     // region Attributes
 
