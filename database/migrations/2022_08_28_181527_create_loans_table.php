@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->unsignedInteger('outstanding_amount')->nullable(); // should use accessor to calculate
             $table->string('currency_code')->default('TRY');
             $table->integer('terms')->default(1);
-            $table->string('status')->default('PENDING');
+            $table->string('status')->default('DUE');
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();
         });

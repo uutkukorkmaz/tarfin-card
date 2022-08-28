@@ -44,7 +44,7 @@ class Loan extends Model
     protected $casts = [
         'status' => PaymentStatus::class,
         'currency_code' => CurrencyType::class,
-        'processed_at' => 'datetime',
+        'processed_at' => 'immutable_date',
     ];
 
     // endregion

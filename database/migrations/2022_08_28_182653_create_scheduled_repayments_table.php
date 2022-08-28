@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->unsignedFloat('outstanding_amount')->nullable(); // should use accessor to calculate
             $table->string('currency_code')->default('TRY');
             $table->timestamp('due_date')->nullable();
-            $table->string('status')->default('PAID');
+            $table->string('status')->default('DUE');
             $table->timestamps();
         });
     }
