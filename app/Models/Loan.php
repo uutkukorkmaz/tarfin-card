@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\CurrencyType;
 use App\Enums\PaymentStatus;
+use App\Traits\HasPaymentStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
