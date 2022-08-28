@@ -16,6 +16,7 @@ use Tests\TestCase;
 
 class TarfinCardTransactionControllerTest extends TestCase
 {
+
     use RefreshDatabase;
 
     protected function setUp(): void
@@ -124,15 +125,15 @@ class TarfinCardTransactionControllerTest extends TestCase
      */
     public function a_customer_can_not_list_tarfin_card_transactions_for_a_tarfin_card_of_another_customer(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $customer = User::factory()->create();
+        $anotherCustomer = User::factory()->create();
+        $tarfinCard = $anotherCustomer->tarfinCards()
+            ->save(TarfinCard::factory()->active()->make());
+        $tarfinCard->transactions()
+            ->saveMany(TarfinCardTransaction::factory()->times(3)->make());
 
-        // 2. Act 🏋🏻‍
-        // TODO:
-
-        // 3. Assert ✅
-        // TODO:
+        $this->actingAs($customer)
+            ->get(route('tarfin-cards.tarfin-card-transactions.index', $tarfinCard))
+            ->assertForbidden();
     }
-
-    // THE MORE TESTS THE MORE POINTS 🏆
 }
