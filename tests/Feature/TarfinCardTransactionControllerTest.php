@@ -40,6 +40,12 @@ class TarfinCardTransactionControllerTest extends TestCase
                 'amount' => 100,
                 'currency_code' => CurrencyType::EUR,
             ])->assertCreated();
+
+        $this->assertDatabaseHas('tarfin_card_transactions', [
+            'tarfin_card_id' => $tarfinCard->id,
+            'amount' => 100,
+            'currency_code' => CurrencyType::EUR,
+        ]);
     }
 
     /**
