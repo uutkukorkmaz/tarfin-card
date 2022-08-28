@@ -8,12 +8,23 @@ use App\Models\User;
 use App\Models\TarfinCard;
 use App\Enums\CurrencyType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class TarfinCardTransactionControllerTest extends TestCase
 {
 
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+        Http::fake([
+            'http://you-should-mock-this-job' => Http::response([], 200),
+        ]);
+    }
 
     /**
      * @test
