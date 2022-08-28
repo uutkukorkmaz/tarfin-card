@@ -59,7 +59,7 @@ class User extends Authenticatable
     // region Relations
 
     /**
-     * An User has many Tarfin Cards.
+     * A User has many Tarfin Cards.
      */
     public function tarfinCards(): HasMany
     {
