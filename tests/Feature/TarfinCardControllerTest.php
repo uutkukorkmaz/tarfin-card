@@ -54,9 +54,7 @@ class TarfinCardControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $tarfinCard = $user->tarfinCards()->save(
-            TarfinCard::factory()->make([
-                'type' => 'American Express',
-            ])
+            TarfinCard::factory()->active()->make()
         );
         $resource = new TarfinCardResource($tarfinCard);
         $request = Request::create(route('tarfin-cards.show', $tarfinCard));
@@ -76,9 +74,7 @@ class TarfinCardControllerTest extends TestCase
         $customer = User::factory()->create();
         $anotherCustomer = User::factory()->create();
         $tarfinCard = $anotherCustomer->tarfinCards()->save(
-            TarfinCard::factory()->make([
-                'type' => 'American Express',
-            ])
+            TarfinCard::factory()->active()->make()
         );
 
         $this->actingAs($customer)
