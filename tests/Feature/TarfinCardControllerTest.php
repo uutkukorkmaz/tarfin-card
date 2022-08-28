@@ -73,14 +73,17 @@ class TarfinCardControllerTest extends TestCase
      */
     public function a_customer_can_not_see_a_tarfin_card_of_another_customer(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $customer = User::factory()->create();
+        $anotherCustomer = User::factory()->create();
+        $tarfinCard = $anotherCustomer->tarfinCards()->save(
+            TarfinCard::factory()->make([
+                'type' => 'American Express',
+            ])
+        );
 
-        // 2. Act 🏋🏻‍
-        // TODO:
-
-        // 3. Assert ✅
-        // TODO:
+        $this->actingAs($customer)
+            ->getJson(route('tarfin-cards.show', $tarfinCard))
+            ->assertForbidden();
     }
 
     /**
