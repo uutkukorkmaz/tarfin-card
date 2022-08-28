@@ -15,10 +15,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('recieved_repayments', function (Blueprint $table) {
+        Schema::create('received_repayments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('loan_id')->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('amount');
+            $table->unsignedFloat('amount');
             $table->string('currency_code');
             $table->timestamp('received_at')->nullable();
             $table->timestamps();
@@ -32,7 +32,7 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('recieved_repayments');
+        Schema::dropIfExists('received_repayments');
     }
 
 };

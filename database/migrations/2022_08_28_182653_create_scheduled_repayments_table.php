@@ -19,10 +19,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('loan_id')->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('amount');
-            $table->unsignedInteger('outstanding_amount'); // should use accessor to calculate
+            $table->unsignedFloat('outstanding_amount'); // should use accessor to calculate
             $table->string('currency_code');
             $table->timestamp('due_date')->nullable();
-            $table->string('status')->default('PENDING');
+            $table->string('status')->default('PAID');
             $table->timestamps();
         });
     }
