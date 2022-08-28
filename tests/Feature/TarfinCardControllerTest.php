@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use App\Models\TarfinCard;
+use App\Http\Resources\TarfinCardResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,14 +19,17 @@ class TarfinCardControllerTest extends TestCase
      */
     public function a_customer_can_create_a_tarfin_card(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
 
-        // 2. Act 🏋🏻‍
-        // TODO:
+        $this->actingAs($user)
+            ->postJson(route('tarfin-cards.store'), [
+                'type' => 'American Express',
+            ])->assertCreated();
 
-        // 3. Assert ✅
-        // TODO:
+        $this->assertDatabaseHas('tarfin_cards', [
+            'user_id' => $user->id,
+            'type' => 'American Express',
+        ]);
     }
 
     /**
