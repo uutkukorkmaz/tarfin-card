@@ -104,14 +104,19 @@ class TarfinCardControllerTest extends TestCase
      */
     public function a_customer_can_activate_the_tarfin_card(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
+        $tarfinCard = $user->tarfinCards()
+            ->save(TarfinCard::factory()->deactive()->make());
 
-        // 2. Act 🏋🏻‍
-        // TODO:
 
-        // 3. Assert ✅
-        // TODO:
+        $response = $this->actingAs($user)
+            ->putJson(route('tarfin-cards.update', $tarfinCard), [
+                'is_active' => true,
+            ]);
+        $tarfinCard->refresh();
+
+        $this->assertTrue($tarfinCard->is_active);
+        $response->assertOk();
     }
 
     /**
