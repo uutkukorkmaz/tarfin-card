@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use App\Models\TarfinCard;
+use App\Enums\CurrencyType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TarfinCardTransactionControllerTest extends TestCase
 {
+
     use RefreshDatabase;
 
     /**
@@ -16,14 +20,15 @@ class TarfinCardTransactionControllerTest extends TestCase
      */
     public function a_customer_can_create_a_tarfin_card_transaction(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
+        $tarfinCard = $user->tarfinCards()
+            ->save(TarfinCard::factory()->active()->make());
 
-        // 2. Act 🏋🏻‍
-        // TODO:
-
-        // 3. Assert ✅
-        // TODO:
+        $this->actingAs($user)
+            ->postJson(route('tarfin-cards.tarfin-card-transactions.store', $tarfinCard), [
+                'amount' => 100,
+                'currency_code' => CurrencyType::EUR,
+            ])->assertCreated();
     }
 
     /**
