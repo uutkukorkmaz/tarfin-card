@@ -53,14 +53,16 @@ class TarfinCardTransactionControllerTest extends TestCase
      */
     public function a_customer_can_not_create_a_tarfin_card_transaction_for_a_tarfin_card_of_another_customer(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $customer = User::factory()->create();
+        $anotherCustomer = User::factory()->create();
+        $tarfinCard = $anotherCustomer->tarfinCards()
+            ->save(TarfinCard::factory()->active()->make());
 
-        // 2. Act 🏋🏻‍
-        // TODO:
-
-        // 3. Assert ✅
-        // TODO:
+        $this->actingAs($customer)
+            ->postJson(route('tarfin-cards.tarfin-card-transactions.store', $tarfinCard), [
+                'amount' => 100,
+                'currency_code' => CurrencyType::EUR,
+            ])->assertForbidden();
     }
 
     /**
