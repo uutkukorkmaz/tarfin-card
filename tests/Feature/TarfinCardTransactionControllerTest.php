@@ -7,6 +7,7 @@ namespace Tests\Feature;
 use App\Enums\CurrencyType;
 use App\Models\TarfinCard;
 use App\Models\User;
+use App\Models\TarfinCardTransaction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -70,14 +71,15 @@ class TarfinCardTransactionControllerTest extends TestCase
      */
     public function a_customer_can_see_a_tarfin_card_transaction(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
+        $tarfinCard = $user->tarfinCards()
+            ->save(TarfinCard::factory()->active()->make());
+        $tarfinCardTransaction = $tarfinCard->transactions()
+            ->save(TarfinCardTransaction::factory()->make());
 
-        // 2. Act 🏋🏻‍
-        // TODO:
-
-        // 3. Assert ✅
-        // TODO:
+        $this->actingAs($user)
+            ->getJson(route('tarfin-card-transactions.show', [$tarfinCardTransaction]))
+            ->assertOk();
     }
 
     /**
