@@ -15,7 +15,6 @@ use Tests\TestCase;
 
 class TarfinCardControllerTest extends TestCase
 {
-
     use RefreshDatabase;
 
     /**
@@ -157,5 +156,19 @@ class TarfinCardControllerTest extends TestCase
         Notification::assertSentTo($user, TarfinCardDeletedNotification::class);
     }
 
-    // THE MORE TESTS THE MORE POINTS 🏆
+    /**
+     * @test
+     */
+    public function a_customer_can_not_delete_a_tarfin_card_of_another_customer(): void
+    {
+        $customer = User::factory()->create();
+        $anotherCustomer = User::factory()->create();
+        $tarfinCard = $anotherCustomer->tarfinCards()
+            ->save(TarfinCard::factory()->active()->make());
+
+        $this->actingAs($customer)
+            ->delete(route('tarfin-cards.destroy', $tarfinCard))
+            ->assertForbidden();
+    }
+
 }
