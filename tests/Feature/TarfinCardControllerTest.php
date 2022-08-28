@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\TarfinCard;
-use Illuminate\Support\Facades\Request;
 use App\Http\Resources\TarfinCardResource;
+use App\Models\TarfinCard;
+use App\Models\User;
+use App\Notifications\TarfinCardDeletedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Request;
 use Tests\TestCase;
 
 class TarfinCardControllerTest extends TestCase
@@ -93,7 +95,6 @@ class TarfinCardControllerTest extends TestCase
         $collection = TarfinCardResource::collection($tarfinCards);
         $request = Request::create(route('tarfin-cards.index'));
 
-
         $response = $this->actingAs($user)->get(route('tarfin-cards.index'));
         $response->assertOk();
         $response->assertExactJson(['data' => $collection->toArray($request)]);
@@ -107,7 +108,6 @@ class TarfinCardControllerTest extends TestCase
         $user = User::factory()->create();
         $tarfinCard = $user->tarfinCards()
             ->save(TarfinCard::factory()->deactive()->make());
-
 
         $response = $this->actingAs($user)
             ->putJson(route('tarfin-cards.update', $tarfinCard), [
@@ -128,7 +128,6 @@ class TarfinCardControllerTest extends TestCase
         $tarfinCard = $user->tarfinCards()
             ->save(TarfinCard::factory()->active()->make());
 
-
         $response = $this->actingAs($user)
             ->putJson(route('tarfin-cards.update', $tarfinCard), [
                 'is_active' => false,
@@ -144,14 +143,18 @@ class TarfinCardControllerTest extends TestCase
      */
     public function a_customer_can_delete_a_tarfin_card(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        Notification::fake();
+        $user = User::factory()->create();
+        $tarfinCard = $user->tarfinCards()
+            ->save(TarfinCard::factory()->active()->make());
 
-        // 2. Act 🏋🏻‍
-        // TODO:
+        $response = $this->actingAs($user)
+            ->delete(route('tarfin-cards.destroy', $tarfinCard));
+        $tarfinCard->refresh();
 
-        // 3. Assert ✅
-        // TODO:
+        $this->assertSoftDeleted($tarfinCard);
+        $response->assertOk();
+        Notification::assertSentTo($user, TarfinCardDeletedNotification::class);
     }
 
     // THE MORE TESTS THE MORE POINTS 🏆
