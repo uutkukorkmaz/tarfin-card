@@ -37,14 +37,12 @@ class TarfinCardControllerTest extends TestCase
      */
     public function a_customer_can_not_create_an_invalid_tarfin_card(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
 
-        // 2. Act 🏋🏻‍
-        // TODO:
-
-        // 3. Assert ✅
-        // TODO:
+        $this->actingAs($user)
+            ->postJson(route('tarfin-cards.store'), [
+                'type' => 'INVALID CARD TYPE FOR TEST PURPOSES',
+            ])->assertStatus(422);
     }
 
     /**
