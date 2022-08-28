@@ -11,6 +11,11 @@ class ReceivedRepayment extends Model
 
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'loan_id',
         'amount',
@@ -18,6 +23,11 @@ class ReceivedRepayment extends Model
         'received_at',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'received_at' => 'immutable_date',
         'currency_code' => CurrencyType::class,
