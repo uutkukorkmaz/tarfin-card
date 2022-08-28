@@ -6,12 +6,14 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\TarfinCard;
+use Illuminate\Support\Facades\Request;
 use App\Http\Resources\TarfinCardResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TarfinCardControllerTest extends TestCase
 {
+
     use RefreshDatabase;
 
     /**
@@ -50,14 +52,20 @@ class TarfinCardControllerTest extends TestCase
      */
     public function a_customer_can_see_a_tarfin_card(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
+        $tarfinCard = $user->tarfinCards()->save(
+            TarfinCard::factory()->make([
+                'type' => 'American Express',
+            ])
+        );
+        $resource = new TarfinCardResource($tarfinCard);
+        $request = Request::create(route('tarfin-cards.show', $tarfinCard));
 
-        // 2. Act 🏋🏻‍
-        // TODO:
+        $response = $this->actingAs($user)
+            ->getJson(route('tarfin-cards.show', $tarfinCard));
 
-        // 3. Assert ✅
-        // TODO:
+        $response->assertOk();
+        $this->assertSameSize($resource->toArray($request), $response->json('data'));
     }
 
     /**
