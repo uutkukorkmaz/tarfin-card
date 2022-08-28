@@ -15,6 +15,7 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable
 {
+
     use HasFactory;
 
     use Notifiable;
@@ -64,6 +65,14 @@ class User extends Authenticatable
     public function tarfinCards(): HasMany
     {
         return $this->hasMany(TarfinCard::class);
+    }
+
+    /**
+     * A User has many Loans.
+     */
+    public function loans(): HasMany
+    {
+        return $this->hasMany(Loan::class);
     }
 
     // endregion
