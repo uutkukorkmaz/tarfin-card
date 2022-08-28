@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Enums\CurrencyType;
+use App\Http\Resources\TarfinCardTransactionResource;
 use App\Models\TarfinCard;
-use App\Models\User;
 use App\Models\TarfinCardTransaction;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
 use Tests\TestCase;
 
 class TarfinCardTransactionControllerTest extends TestCase
 {
-
     use RefreshDatabase;
 
     protected function setUp(): void
@@ -103,14 +104,19 @@ class TarfinCardTransactionControllerTest extends TestCase
      */
     public function a_customer_can_list_tarfin_card_transactions(): void
     {
-        // 1. Arrange 🏗
-        // TODO:
+        $user = User::factory()->create();
+        $tarfinCard = $user->tarfinCards()
+            ->save(TarfinCard::factory()->active()->make());
+        $tarfinCardTransactions = $tarfinCard->transactions()
+            ->saveMany(TarfinCardTransaction::factory()->times(3)->make());
+        $collection = TarfinCardTransactionResource::collection($tarfinCardTransactions);
+        $request = Request::create(route('tarfin-cards.tarfin-card-transactions.index', $tarfinCard));
 
-        // 2. Act 🏋🏻‍
-        // TODO:
+        $response = $this->actingAs($user)
+            ->getJson(route('tarfin-cards.tarfin-card-transactions.index', $tarfinCard));
 
-        // 3. Assert ✅
-        // TODO:
+        $response->assertOk();
+        $response->assertExactJson(['data' => $collection->toArray($request)]);
     }
 
     /**
